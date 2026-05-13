@@ -34,6 +34,7 @@
             background: var(--bg);
             z-index: 5000;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease;
         }
 
         .controls-container {
@@ -72,13 +73,13 @@
         .btn { padding: 14px 32px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1.5px; }
         .btn-primary { background: var(--gold); color: #000; }
 
-        /* THE CHICKEN BUTTON */
+        /* NO BUTTON CSS */
         #no-button {
             background: transparent;
             color: var(--white);
             border: 1px solid rgba(255, 255, 255, 0.3);
             z-index: 9999;
-            transition: all 0.2s ease-out; /* Faster jump transition */
+            transition: all 0.2s ease-out;
         }
 
         .step { display: none; }
@@ -115,8 +116,8 @@
             </div>
 
             <div id="step2" class="step">
-                <h1>From Chats to Reality</h1>
-                <p>We might have started as online friends staying in different corners of this campus area, but I want to bridge the gap between our screens and our lives.</p>
+                <h1>Beyond These Walls</h1>
+                <p>We might have started as online friends staying in different places near campus, but I want to bridge the gap between our screens and our lives.</p>
                 <button class="btn btn-primary" onclick="changeStep(2, 3)">Continue...</button>
             </div>
 
@@ -146,8 +147,9 @@
         volSlider.addEventListener('input', (e) => { music.volume = e.target.value; });
 
         function initSite() {
-            document.getElementById('entry-overlay').style.opacity = '0';
-            setTimeout(() => { document.getElementById('entry-overlay').style.display = 'none'; }, 500);
+            const overlay = document.getElementById('entry-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => { overlay.style.display = 'none'; }, 500);
             music.play();
         }
 
@@ -170,15 +172,17 @@
         }
 
         function chickenChase() {
-            // Force it to stay fixed to the background
+            // THE FIX: Move the button to the body level so it is no longer trapped in the card
+            if (noButton.parentElement.tagName !== 'BODY') {
+                document.body.appendChild(noButton);
+            }
+
             noButton.style.position = 'fixed';
             
-            // Calculate random spots within the visible window only
             const width = window.innerWidth;
             const height = window.innerHeight;
             
-            // Generate a random X and Y within the screen bounds
-            // Subtracted 150 for width and 100 for height to keep it fully visible
+            // Generate coordinates within the visible background screen
             const randomX = Math.max(50, Math.floor(Math.random() * (width - 150)));
             const randomY = Math.max(50, Math.floor(Math.random() * (height - 100)));
             
